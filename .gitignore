@@ -1,0 +1,5 @@
+bridge/target/
+mcp-bridge-plugin/node_modules/
+mcp-bridge-plugin/dist/
+# source artwork (2 MB); the repository uses docs/assets/logo*.png
+figma-mcp-compact_logo.jpg
