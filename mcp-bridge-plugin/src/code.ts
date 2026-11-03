@@ -16,7 +16,7 @@ import { RpcError, failure, isFailure, validateRequest } from './sandbox/rpc';
 import { restJsonBaseline } from './sandbox/bench';
 import { HANDLERS, selectionLines } from './sandbox/tools';
 
-const PLUGIN_VERSION = '0.1.0';
+const PLUGIN_VERSION = '0.1.1';
 const PREFS_KEY = 'mcp-bridge.prefs';
 const SELECTION_DEBOUNCE_MS = 120;
 /**

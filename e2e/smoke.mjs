@@ -2,11 +2,14 @@
 // Run: node e2e/smoke.mjs            - JAR (after `mvn -f bridge/pom.xml package`)
 //      node e2e/smoke.mjs --docker   - figma-mcp-bridge image (after `docker build -t figma-mcp-bridge bridge`)
 import { spawn } from 'node:child_process';
+import { readdirSync } from 'node:fs';
 import { createInterface } from 'node:readline';
 import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 
-const JAR = fileURLToPath(new URL('../bridge/target/figma-mcp-bridge-0.1.0.jar', import.meta.url));
+// Any version: the e2e test runs against whatever `mvn package` produced.
+const TARGET = fileURLToPath(new URL('../bridge/target/', import.meta.url));
+const JAR = TARGET + (readdirSync(TARGET).find((f) => /^figma-mcp-bridge-.*\.jar$/.test(f)) ?? 'figma-mcp-bridge.jar');
 const DOCKER = process.argv.includes('--docker');
 const BRIDGE_CMD = DOCKER
   ? ['docker', ['run', '-i', '--rm', '-p', '127.0.0.1:3055:3055', 'figma-mcp-bridge']]
@@ -60,7 +63,7 @@ function fakePlugin(calls) {
     const ws = new WebSocket(WS_URL);
     ws.onerror = (e) => reject(e);
     ws.onopen = () => {
-      ws.send(JSON.stringify({ jsonrpc: '2.0', method: 'figma/hello', params: { fileKey: 'FILE1', fileVersion: 'session-1', pageId: '0:1', pageName: 'Page 1', selectionCount: 1, pluginVersion: '0.1.0' } }));
+      ws.send(JSON.stringify({ jsonrpc: '2.0', method: 'figma/hello', params: { fileKey: 'FILE1', fileVersion: 'session-1', pageId: '0:1', pageName: 'Page 1', selectionCount: 1, pluginVersion: '0.1.1' } }));
       ws.send(JSON.stringify({ jsonrpc: '2.0', method: 'figma/selection_changed', params: ['12:34|Header Frame|FRAME'] }));
       resolve(ws);
     };

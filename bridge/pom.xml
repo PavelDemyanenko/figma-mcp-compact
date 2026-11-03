@@ -11,7 +11,7 @@
   </parent>
   <groupId>figmamcp</groupId>
   <artifactId>figma-mcp-bridge</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.1</version>
   <properties>
     <java.version>25</java.version>
     <spring-ai.version>2.0.1</spring-ai.version>
