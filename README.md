@@ -57,37 +57,31 @@ Full output formats: [docs/protocol.md](docs/protocol.md).
 
 ## Quick start
 
-Requirements: Figma Desktop (the free plan works), Node.js 20+, Java 25 + Maven, an MCP host (Claude Code, Cursor or Claude Desktop). Docker Desktop if you work in WSL (see below).
+You need Figma Desktop (the free plan works), an MCP host (Claude Code, Cursor or Claude Desktop) and **Docker** — or Java 25 instead of Docker. No Node.js or Maven: everything is prebuilt in the [latest release](https://github.com/PavelDemyanenko/figma-mcp-compact/releases/latest).
 
-1. **Build the plugin**
+1. **Install the plugin.** Download `figma-mcp-compact-plugin-<version>.zip` from the [latest release](https://github.com/PavelDemyanenko/figma-mcp-compact/releases/latest) and unzip it. In Figma Desktop open any design file → Plugins → Development → Import plugin from manifest… → `figma-mcp-compact-plugin/manifest.json`.
+2. **Register the bridge** in your MCP host — it starts the bridge itself.
+
+   Claude Code:
    ```bash
-   cd mcp-bridge-plugin && npm install && npm run build
+   claude mcp add -s user figma-compact -- docker run -i --rm -p 127.0.0.1:3055:3055 ghcr.io/paveldemyanenko/figma-mcp-compact:latest
    ```
-2. **Import it into Figma:** open any design file → Plugins → Development → Import plugin from manifest… → `mcp-bridge-plugin/manifest.json`. Publishing is not needed: development plugins may connect to `localhost:3055`.
-3. **Build the bridge**
-   ```bash
-   cd bridge && mvn package
-   ```
-4. **Register the MCP server** (the host starts the bridge itself):
-   ```bash
-   claude mcp add -s user figma-compact -- java -jar /ABS/PATH/bridge/target/figma-mcp-bridge-0.1.0.jar
-   ```
-   Cursor / Claude Desktop (`mcp.json` / `claude_desktop_config.json`):
+   Cursor (`~/.cursor/mcp.json`) / Claude Desktop (`claude_desktop_config.json`):
    ```json
-   { "mcpServers": { "figma-compact": { "command": "java", "args": ["-jar", "/ABS/PATH/bridge/target/figma-mcp-bridge-0.1.0.jar"] } } }
+   { "mcpServers": { "figma-compact": { "command": "docker", "args": ["run", "-i", "--rm", "-p", "127.0.0.1:3055:3055", "ghcr.io/paveldemyanenko/figma-mcp-compact:latest"] } } }
    ```
-5. **Run the plugin** (Plugins → Development → Figma MCP Compact). The indicator turns green — "Connected (:3055)". Select a frame and ask your agent: *"What is selected in Figma?"*
+   <details><summary>Without Docker (Java 25)</summary>
 
-### WSL: Figma on Windows, tools in WSL
+   Download `figma-mcp-bridge-<version>.jar` from the [latest release](https://github.com/PavelDemyanenko/figma-mcp-compact/releases/latest):
+   ```bash
+   claude mcp add -s user figma-compact -- java -jar /ABS/PATH/figma-mcp-bridge-<version>.jar
+   ```
+   Not for WSL: Figma on Windows cannot reach a bridge started with `java` inside WSL2 — use Docker there.
+   </details>
+3. **Restart the MCP host**, then run the plugin (Plugins → Development → Figma MCP Compact). The indicator turns green — "Connected (:3055)".
+4. Select a frame and ask your agent: *"What is selected in Figma?"*
 
-Windows cannot reach services that listen on `127.0.0.1` inside WSL2 (NAT mode), so the plugin would keep retrying. Run the bridge in Docker instead — Docker Desktop publishes the port to Windows:
-
-```bash
-cd bridge && mvn package && docker build -t figma-mcp-bridge .
-claude mcp add -s user figma-compact -- docker run -i --rm -p 127.0.0.1:3055:3055 figma-mcp-bridge
-```
-
-Check from PowerShell: `Test-NetConnection localhost -Port 3055`.
+The image is multi-arch (amd64, arm64) and listens only on your machine's loopback. Docker Desktop must be running whenever the MCP host starts.
 
 ## Plugin UI
 
@@ -101,15 +95,26 @@ Everything the tools return — layer names, texts, style names, SVG — is **un
 
 ## Development
 
+Build from source: Node.js 22+, Java 25 + Maven.
+
+```bash
+cd mcp-bridge-plugin && npm install && npm run build          # plugin -> dist/, import mcp-bridge-plugin/manifest.json
+cd bridge && mvn package                                       # bridge -> target/figma-mcp-bridge-<version>.jar
+docker build -t figma-mcp-bridge bridge                        # local image (needs the jar)
+```
+
+Checks:
+
 ```bash
 cd mcp-bridge-plugin && npm run typecheck && npm test && npm run build   # plugin: unit tests
 cd bridge && mvn package                                                 # bridge: unit tests + jar
 node e2e/smoke.mjs                                                       # end-to-end: real bridge + plugin emulator + MCP client
-node e2e/smoke.mjs --docker                                              # the same against the Docker image
+node e2e/smoke.mjs --docker                                              # the same against the local Docker image
 ```
 
-The e2e test refuses to start while another bridge holds port 3055 (it would take the port over). See [CONTRIBUTING.md](CONTRIBUTING.md) and [docs/architecture.md](docs/architecture.md).
+CI runs all of this on every push; pushing a `v*` tag publishes a release (jar, plugin zip, checksums) and the multi-arch image to ghcr.io.
 
+The e2e test refuses to start while another bridge holds port 3055 (it would take the port over). See [CONTRIBUTING.md](CONTRIBUTING.md) and [docs/architecture.md](docs/architecture.md).
 ## Troubleshooting
 
 | Symptom | Fix |
