@@ -9,6 +9,11 @@
   в компактном строчном формате, который тратит <b>примерно на 94% меньше токенов</b>, чем сырой JSON Figma.
 </p>
 
+<p align="center">
+  <a href="https://github.com/PavelDemyanenko/figma-mcp-compact/actions/workflows/ci.yml"><img src="https://github.com/PavelDemyanenko/figma-mcp-compact/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Лицензия MIT"></a>
+</p>
+
 <p align="center"><a href="README.md">English</a></p>
 
 ---
