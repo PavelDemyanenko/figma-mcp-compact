@@ -1,0 +1,23 @@
+name: Feature request
+description: Suggest a tool, a field or an improvement
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What the agent cannot do today
+      description: The design or task where the current tools fall short (a screenshot of the design helps).
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: |
+        What data or tool would help. Every new field costs tokens on every call — say whether it could be opt-in
+        (like `svg: true`) and roughly how often agents would need it.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives tried
+      description: e.g. figma_get_screenshot, a different detail level, a prefix.

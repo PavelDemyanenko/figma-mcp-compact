@@ -1,0 +1,75 @@
+name: Bug report
+description: Something does not work as expected
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Please check [Troubleshooting](https://github.com/PavelDemyanenko/figma-mcp-compact#troubleshooting) first.
+        **Do not paste design content you are not allowed to share** — layer names and texts from private files included.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, what you got instead.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Release tag, or the commit if built from source.
+      placeholder: v0.1.1
+    validations:
+      required: true
+  - type: dropdown
+    id: bridge
+    attributes:
+      label: How the bridge runs
+      options:
+        - Docker image (ghcr.io)
+        - Java jar
+        - Built from source
+    validations:
+      required: true
+  - type: dropdown
+    id: host
+    attributes:
+      label: MCP host
+      options:
+        - Claude Code
+        - Cursor
+        - Claude Desktop
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      placeholder: macOS 15 (arm64) / Windows 11 + WSL2 / Ubuntu 24.04
+    validations:
+      required: true
+  - type: dropdown
+    id: indicator
+    attributes:
+      label: Plugin connection indicator
+      options:
+        - Green (connected)
+        - Yellow (retrying)
+        - Red (bridge not found)
+        - Plugin does not start
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: |
+        Plugin request log (copy from the plugin window) and/or bridge stderr
+        (Claude Code: `claude --debug`; Docker: the MCP host log). Remove anything confidential.
+      render: text
+  - type: textarea
+    id: tool
+    attributes:
+      label: Tool call (if relevant)
+      description: Tool name, arguments and the response or error the agent got.
+      render: text
