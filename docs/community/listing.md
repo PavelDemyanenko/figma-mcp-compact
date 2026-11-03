@@ -7,6 +7,7 @@ Everything needed for Plugins → Development → Figma MCP Compact → **Publis
 | Name | Figma MCP Compact |
 | Icon (128×128) | [`docs/assets/logo-128.png`](../assets/logo-128.png) |
 | Cover (1920×1080) | [`docs/community/cover.png`](cover.png) |
+| Carousel (1920×1080) | [`carousel-1-how-it-works.png`](carousel-1-how-it-works.png), [`carousel-2-tools.png`](carousel-2-tools.png) |
 | Tagline | Your Figma design for AI coding agents — 94% fewer tokens than raw Figma JSON |
 | Category | Development |
 | Tags | mcp, ai, claude, cursor, developer handoff, code generation, design tokens, llm |
