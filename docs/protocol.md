@@ -35,7 +35,7 @@ The bridge turns errors into MCP tool errors (`isError: true`) with the text `<R
 | `figma/selection_changed` | `["id\|name\|type", …]` (top-level selected nodes) | Selection change (debounced 120 ms) |
 | `figma/styles_invalidated` | `{ timestamp }` | `stylechange` — the bridge drops its styles cache |
 
-`fileVersion` is a plugin session id (the Plugin API exposes no file version), so restarting the plugin always starts with a clean cache.
+`fileKey` is `local:<file name>`: the real file key is only exposed to private organization plugins, and a published Community plugin cannot use that API. `fileVersion` is a plugin session id (the Plugin API exposes no file version), so restarting the plugin always starts with a clean cache.
 
 ## DSL conventions
 

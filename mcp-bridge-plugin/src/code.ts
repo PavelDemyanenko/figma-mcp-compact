@@ -46,6 +46,7 @@ async function handleRpc(raw: unknown): Promise<JsonRpcResponse> {
   }
 }
 
+/** figma.fileKey exists only for private org plugins (enablePrivatePluginApi); Community builds fall back to the file name. */
 function fileKey(): string {
   return figma.fileKey || `local:${figma.root.name}`;
 }

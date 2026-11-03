@@ -1,19 +1,13 @@
 {
   "name": "Figma MCP Compact",
-  "id": "figma-mcp-compact",
+  "id": "1699527951382909616",
   "api": "1.0.0",
-  "editorType": ["figma", "dev"],
-  "capabilities": ["inspect"],
+  "editorType": ["figma"],
   "main": "dist/code.js",
   "ui": "dist/ui.html",
   "documentAccess": "dynamic-page",
-  "enablePrivatePluginApi": true,
   "networkAccess": {
-    "allowedDomains": ["none"],
-    "devAllowedDomains": [
-      "ws://localhost:3055",
-      "http://localhost:3055"
-    ],
-    "reasoning": "Local WebSocket bridge connection for MCP development host."
+    "allowedDomains": ["ws://localhost:3055", "http://localhost:3055"],
+    "reasoning": "The plugin only talks to the Figma MCP Compact bridge running on the user's own machine (localhost:3055), which serves read-only design data to the user's local AI coding agent. No remote servers are contacted."
   }
 }

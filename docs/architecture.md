@@ -37,6 +37,8 @@ The bridge also exits on stdin EOF (the MCP host closed the session); otherwise 
 
 **Docker for WSL.** In WSL2 NAT mode Windows cannot reach `127.0.0.1` inside WSL, so Figma (on Windows) would never connect. The image listens on the container interface (`BRIDGE_ADDRESS=0.0.0.0`) and is published only on host loopback: `docker run -i --rm -p 127.0.0.1:3055:3055 figma-mcp-bridge`. `-i` carries stdio; stdin EOF ends the JVM (PID 1) and the container. The image is layered, runs as non-root and ships an AOT cache for faster cold start.
 
+**Community-ready manifest.** `networkAccess.allowedDomains` lists only `localhost:3055` with a `reasoning`; no private plugin API (so `fileKey` falls back to the file name); Figma Design editor only — Dev Mode is not tested yet.
+
 **Read-only.** No tool modifies the document. All Plugin API access is asynchronous (`getNodeByIdAsync`, `loadAsync`); `findAll`, `loadAllPagesAsync` and `documentchange` are not used.
 
 **Localization.** The plugin UI is English and Russian (`src/i18n.ts`, Russian is the reference dictionary and English must implement every key). ⚙ → Language: Auto (system language) / English / Русский, stored in `figma.clientStorage`. Tool output for the agent is never localized.
